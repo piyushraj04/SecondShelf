@@ -22,6 +22,7 @@ public class User {
     @Column(length = 50, name = "full_name", nullable = false)
     private String fullName;
 
+
     @Enumerated(EnumType.STRING)
     private Role role = Role.BUYER; //by default BUYER
 
@@ -49,4 +50,13 @@ public class User {
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Review> reviews;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL ,orphanRemoval = true)//bxz if seller is nit thwere then their listing should not to be exist
+    private List<BookListing> bookListings;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart;
+
+    @OneToMany(mappedBy = "buyer" , cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> order;
 }

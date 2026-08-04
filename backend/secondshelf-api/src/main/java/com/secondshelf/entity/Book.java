@@ -1,5 +1,6 @@
 package com.secondshelf.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.secondshelf.enums.Category;
 import com.secondshelf.enums.Language;
 import jakarta.persistence.*;
@@ -23,7 +24,7 @@ public class Book {
     @Column(nullable = false)
     private String author;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String isbn;
 
 
@@ -49,13 +50,10 @@ public class Book {
 
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "book",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
-
-
-
-
-
-
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @JsonIgnore
+    List<BookListing> bookListings;
 }
