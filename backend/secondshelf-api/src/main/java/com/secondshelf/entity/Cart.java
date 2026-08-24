@@ -2,6 +2,7 @@ package com.secondshelf.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -17,5 +18,8 @@ public class Cart {
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
 }

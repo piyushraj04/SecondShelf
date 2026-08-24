@@ -16,13 +16,15 @@ public class BookListing {
 
 
     @ManyToOne
-    @JoinColumn(name = "seller_id")
+    @JoinColumn(name = "seller_id",nullable = false)
     @JsonIgnore
     private User seller;
 
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id",nullable = false)
     private Book book;
+
+
 
 //    private boolean isUserRoleSeller;   //bcz listing.getUser().getRole() is used
 
@@ -34,7 +36,7 @@ public class BookListing {
     private BookCondition condition = BookCondition.ACCEPTABLE;
 
     @Column(nullable = false)
-    private int quantity;
+    private Integer quantity;
 
     private String description;
 
