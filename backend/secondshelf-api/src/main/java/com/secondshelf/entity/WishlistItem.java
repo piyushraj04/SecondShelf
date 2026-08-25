@@ -7,7 +7,10 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 @Entity
-@Table(name = "wishlist_items")
+//Prevent the same listing from being added twice to the same wishlist.
+@Table(name = "wishlist_items",uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"wishlist_id","book_listing_id"})
+} )
 @Getter
 @Setter
 public class WishlistItem {
@@ -20,7 +23,7 @@ public class WishlistItem {
     @JsonIgnore
     private Wishlist wishlist;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "book_listing_id",nullable = false)
     private BookListing bookListing;
 

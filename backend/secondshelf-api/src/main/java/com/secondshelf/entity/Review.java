@@ -2,6 +2,8 @@ package com.secondshelf.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +28,8 @@ public class Review {
     @JoinColumn(name = "book_id",nullable = false)
     private Book book;
 
+    @Min(1)
+    @Max(5)
     private Float rating;
 
     private String comment;

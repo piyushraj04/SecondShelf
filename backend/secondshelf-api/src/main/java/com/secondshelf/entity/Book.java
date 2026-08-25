@@ -50,10 +50,10 @@ public class Book {
 
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "book")
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "book")
     @JsonIgnore
     List<BookListing> bookListings;
 }

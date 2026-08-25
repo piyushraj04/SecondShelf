@@ -2,6 +2,7 @@ package com.secondshelf.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,8 +26,9 @@ public class CartItem {
     @JoinColumn(name = "book_listing_id",nullable = false)
     private BookListing  bookListing;
 
+    @Min(1)
     @Column(nullable = false)
-    private int quantity;
+    private Integer quantity;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

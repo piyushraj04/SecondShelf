@@ -3,6 +3,8 @@ package com.secondshelf.entity;
 import com.secondshelf.enums.Role;
 import com.secondshelf.enums.UserStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,22 +46,25 @@ public class User {
 
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true) //r/s is already managed by user in Address
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    //r/s is already managed by user in Address
     //This child no longer belongs to any parent--by orphanRemoval
     private List<Address> addresses;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    //    consider whether deleting a user should delete reviews.For a marketplace, review history can have business value.
+    @OneToMany(mappedBy = "user")
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL ,orphanRemoval = true)//bxz if seller is not there then their listing should not to be exist
+    @OneToMany(mappedBy = "user")//bxz if seller is not there then their listing should not to be exist
     private List<BookListing> bookListings;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;
 
-    @OneToMany(mappedBy = "buyer" , cascade = CascadeType.ALL)
+    //    Deleting the user should not casually destroy financial/order history. that's why we remove cascade from here
+    @OneToMany(mappedBy = "buyer")
     private List<Order> orders;
 
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Wishlist wishlist;
 }
