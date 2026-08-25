@@ -55,7 +55,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "user")//bxz if seller is not there then their listing should not to be exist
+    @OneToMany(mappedBy = "seller")//bxz if seller is not there then their listing should not to be exist
     private List<BookListing> bookListings;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

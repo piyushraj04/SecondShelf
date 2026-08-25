@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.secondshelf.enums.BookCondition;
 import com.secondshelf.enums.ListingStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,6 +39,7 @@ public class BookListing {
     @Enumerated(EnumType.STRING)
     private BookCondition condition = BookCondition.ACCEPTABLE;
 
+    @Min(0)
     @Column(nullable = false)
     private Integer quantity;
 
