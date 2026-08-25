@@ -2,8 +2,6 @@ package com.secondshelf.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.secondshelf.enums.OrderStatus;
-import com.secondshelf.enums.PaymentMethod;
-import com.secondshelf.enums.PaymentStatus;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -32,11 +30,8 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus = OrderStatus.PENDING;
 
-    @Enumerated(EnumType.STRING)
-    private PaymentMethod paymentMethod;
-
-    @Enumerated(EnumType.STRING)
-    private PaymentStatus paymentStatus;
+    @OneToOne(mappedBy = "order")
+    private Payment payment;
 
     private LocalDateTime createdAt;
 
