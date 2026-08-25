@@ -4,11 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.secondshelf.enums.BookCondition;
 import com.secondshelf.enums.ListingStatus;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "book_listings")
+@Getter
+@Setter
 public class BookListing {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -23,8 +28,6 @@ public class BookListing {
     @ManyToOne
     @JoinColumn(name = "book_id",nullable = false)
     private Book book;
-
-
 
 //    private boolean isUserRoleSeller;   //bcz listing.getUser().getRole() is used
 

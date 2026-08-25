@@ -5,31 +5,27 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
+import java.time.LocalDateTime;
 @Entity
-@Table(name = "order_item")
+@Table(name = "wishlist_items")
 @Getter
 @Setter
-public class OrderItem {
-
+public class WishlistItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id",nullable = false)
+    @JoinColumn(name = "wishlist_id",nullable = false)
     @JsonIgnore
-    private Order order;
+    private Wishlist wishlist;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "book_listing_id",nullable = false)
     private BookListing bookListing;
 
-    @Column(nullable = false)
-        private BigDecimal unitPrice; //we fetch it from bookListing
+    private LocalDateTime createdAt;
 
-    @Column(nullable = false)
-    private Integer quantity;
+    private LocalDateTime updatedAt;
 
 }

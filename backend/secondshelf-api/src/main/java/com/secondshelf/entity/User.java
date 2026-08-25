@@ -51,7 +51,7 @@ public class User {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL ,orphanRemoval = true)//bxz if seller is nit thwere then their listing should not to be exist
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL ,orphanRemoval = true)//bxz if seller is not there then their listing should not to be exist
     private List<BookListing> bookListings;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -59,4 +59,7 @@ public class User {
 
     @OneToMany(mappedBy = "buyer" , cascade = CascadeType.ALL)
     private List<Order> orders;
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Wishlist wishlist;
 }
