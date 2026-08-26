@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "cart_items")
 @Getter
 @Setter
-public class CartItem {
+public class CartItem extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,8 +29,5 @@ public class CartItem {
     @Min(1)
     @Column(nullable = false)
     private Integer quantity;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
 }

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 } )
 @Getter
 @Setter
-public class WishlistItem {
+public class WishlistItem extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,9 +26,4 @@ public class WishlistItem {
     @ManyToOne
     @JoinColumn(name = "book_listing_id",nullable = false)
     private BookListing bookListing;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
 }

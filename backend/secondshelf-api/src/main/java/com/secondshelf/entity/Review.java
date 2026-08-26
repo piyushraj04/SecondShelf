@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "reviews")
 @Getter
 @Setter
-public class Review {
+public class Review extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,9 +33,5 @@ public class Review {
     private Float rating;
 
     private String comment;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 
 }

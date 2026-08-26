@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = "payments")
 @Getter
 @Setter
-public class Payment {
+public class Payment extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id")
@@ -36,9 +36,5 @@ public class Payment {
     @JoinColumn(name = "order_id",nullable = false,unique = true)
     @JsonIgnore
     private Order order;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 
 }

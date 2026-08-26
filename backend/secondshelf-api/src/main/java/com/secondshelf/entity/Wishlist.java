@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "wishlists")
 @Getter
 @Setter
-public class Wishlist {
+public class Wishlist extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "wishlist_id")
@@ -25,10 +25,6 @@ public class Wishlist {
 
     @OneToMany(mappedBy = "wishlist",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<WishlistItem> wishlistItems;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 
 
 }

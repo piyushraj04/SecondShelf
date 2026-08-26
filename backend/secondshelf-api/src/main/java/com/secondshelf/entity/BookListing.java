@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "book_listings")
 @Getter
 @Setter
-public class BookListing {
+public class BookListing extends BaseEntity{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
@@ -48,8 +48,4 @@ public class BookListing {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ListingStatus status = ListingStatus.AVAILABLE;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 }

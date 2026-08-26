@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "carts")
 @Getter
 @Setter
-public class Cart {
+public class Cart extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,9 +22,5 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 
 }

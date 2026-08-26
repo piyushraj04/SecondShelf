@@ -14,7 +14,7 @@ import java.util.List;
 @Table(name = "orders")
 @Getter
 @Setter
-public class Order {
+public class Order extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId; //this also act as order no bcz its uniques and order id should also unique but one thing for accessing order from outside we need  one separate id or somethings if it's not necessery then its fine to use as both
@@ -36,10 +36,6 @@ public class Order {
 
     @OneToOne(mappedBy = "order")
     private Payment payment;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 
     @Column(nullable = false)
     private String shippingFullName;
