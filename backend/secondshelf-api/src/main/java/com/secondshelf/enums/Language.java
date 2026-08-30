@@ -4,6 +4,6 @@ public enum Language {
     ENGLISH,
     HINDI,
     MAITHILI,
-    GUJARAT,
+    GUJARATI,
     KANNADA
 }

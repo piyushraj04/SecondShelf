@@ -32,7 +32,7 @@ public class Address extends BaseEntity{
     @Column(nullable = false)
     private String pincode;
 
-    private boolean isDefault = true;
+    private boolean isDefault = false;
 
     @ManyToOne
     @JsonIgnore //already included in User

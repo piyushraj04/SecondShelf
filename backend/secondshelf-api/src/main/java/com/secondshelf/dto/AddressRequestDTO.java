@@ -3,6 +3,7 @@ package com.secondshelf.dto;
 import com.secondshelf.enums.Type;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,10 +21,10 @@ public class AddressRequestDTO {
     private String state;
 
     @NotBlank
-    @Min(6)
+    @Size(min = 6)
     private String pincode;
 
     private boolean isDefault = false;
 
-    private Type type;
+    private Type type = Type.HOME;
 }
