@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 public class SecondshelfApiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SecondshelfApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SecondshelfApiApplication.class, args);
+    }
 
 }

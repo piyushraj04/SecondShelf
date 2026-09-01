@@ -9,6 +9,7 @@ import com.secondshelf.repository.AddressRepository;
 import com.secondshelf.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,23 @@ public class AddressService {
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
 
+    private void removeCurrentDefaultAddress(Long userId,AddressRequestDTO addressRequestDTO) {
+        if(addressRequestDTO.isDefault()){
+            addressRepository.findByuserIdAndIsDefaultTrue(userId)
+                    .ifPresent(address -> {
+                        address.setDefault(false);
+                        addressRepository.save(address);
+                    });
+        }
+
+    }
+
+    @Transactional
     public AddressResponseDTO addAddress(Long userId, AddressRequestDTO addressRequestDTO) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User Not Found"));
+
 
         //if address is default
 //        if(addressRequestDTO.isDefault()){
@@ -38,13 +52,8 @@ public class AddressService {
 //            }
 //        }
 
-        if(addressRequestDTO.isDefault()){
-            addressRepository.findByuserIdAndIsDefaultTrue(userId)
-                    .ifPresent(address -> {
-                        address.setDefault(false);
-                        addressRepository.save(address);
-                    });
-        }
+        removeCurrentDefaultAddress(userId,addressRequestDTO);
+
         Address address = new Address();
         address.setAddressLine(addressRequestDTO.getAddressLine());
         address.setCity(addressRequestDTO.getCity());
@@ -110,6 +119,7 @@ public class AddressService {
         return addressResponseDTO;
     }
 
+    @Transactional
     public AddressResponseDTO updateAddress(Long userId,Long addressId, AddressRequestDTO addressRequestDTO){
 
 
@@ -122,15 +132,8 @@ public class AddressService {
         Address address = addressRepository.findByIdAndUserId(addressId,userId)
                 .orElseThrow(()-> new NotFoundException("No address found corresponding to this user"));
 //        If an address is being created/updated as default, find the user's existing default address and unset it before setting the new/current address as default.
-        if(addressRequestDTO.isDefault()){
-            addressRepository.findByuserIdAndIsDefaultTrue(userId)
-                    .ifPresent(currDefault -> {
-                       if(!currDefault.getId().equals(address.getId())) {
-                           currDefault.setDefault(false);
-                           addressRepository.save(currDefault);
-                       }
-                    });
-        }
+//        The default-address switch is a single business operation, therefore its database changes should be atomic.
+        removeCurrentDefaultAddress(userId,addressRequestDTO);
 
 //        address.setUser(address.getUser());
 //        address.setId(addressId);
