@@ -10,5 +10,7 @@ public enum Category {
     TRAVEL,
     ROMANCE,
     MYSTERY,
-    CHILDREN
+    CHILDREN,
+    ACADEMIC,
+    OTHERS
 }
