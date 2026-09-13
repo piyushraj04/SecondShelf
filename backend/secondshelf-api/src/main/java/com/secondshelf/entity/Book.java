@@ -53,4 +53,5 @@ public class Book extends BaseEntity{
     @OneToMany(mappedBy = "book")
     @JsonIgnore
     List<BookListing> bookListings;
+
 }

@@ -7,6 +7,7 @@ import com.secondshelf.exception.NotFoundException;
 import com.secondshelf.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 public class BookService {
     private final BookRepository bookRepository;
 
-    private Book mapToEntity(BookRequestDTO bookRequestDTO){
+    private Book mapToEntity(BookRequestDTO bookRequestDTO) {
         Book book = new Book();
 
         book.setTitle(bookRequestDTO.getTitle());
@@ -30,7 +31,8 @@ public class BookService {
         book.setPublisher(bookRequestDTO.getPublisher());
         return book;
     }
-    private BookResponseDTO mapToResponse(Book savedBook){
+
+    private BookResponseDTO mapToResponse(Book savedBook) {
         BookResponseDTO bookResponseDTO = new BookResponseDTO();
 
         bookResponseDTO.setAuthor(savedBook.getAuthor());
@@ -44,10 +46,10 @@ public class BookService {
         bookResponseDTO.setCoverImageUrl(savedBook.getCoverImageUrl());
         bookResponseDTO.setTitle(savedBook.getTitle());
         bookResponseDTO.setLanguage(savedBook.getLanguage());
-
         return bookResponseDTO;
     }
-    public BookResponseDTO saveBook(BookRequestDTO bookRequestDTO){
+
+    public BookResponseDTO saveBook(BookRequestDTO bookRequestDTO) {
         Book book = mapToEntity(bookRequestDTO);
 
         Book savedBook = bookRepository.save(book);
@@ -57,11 +59,12 @@ public class BookService {
         return bookResponseDTO;
     }
 
-    public List<BookResponseDTO> saveAllBooks(List<BookRequestDTO> bookRequestDTOS){
+    @Transactional
+    public List<BookResponseDTO> saveAllBooks(List<BookRequestDTO> bookRequestDTOS) {
         List<Book> books = new ArrayList<>();
         List<BookResponseDTO> bookResponseDTOS = new ArrayList<>();
 
-        for(BookRequestDTO bookRequestDTO : bookRequestDTOS){
+        for (BookRequestDTO bookRequestDTO : bookRequestDTOS) {
             Book book = mapToEntity(bookRequestDTO);
 
             books.add(book);
@@ -69,7 +72,7 @@ public class BookService {
 
         List<Book> savedBooks = bookRepository.saveAll(books);
 
-        for(Book book : savedBooks){
+        for (Book book : savedBooks) {
             BookResponseDTO bookResponseDTO = mapToResponse(book);
 
             bookResponseDTOS.add(bookResponseDTO);
@@ -78,23 +81,48 @@ public class BookService {
         return bookResponseDTOS;
     }
 
-    public BookResponseDTO getBookById(Long bookId){
+    public BookResponseDTO getBookById(Long bookId) {
         Book fetchedBook = bookRepository.findById(bookId)
-                .orElseThrow(()-> new NotFoundException("No book present with this given id"));
+                .orElseThrow(() -> new NotFoundException("No book present with this given id"));
 
         BookResponseDTO bookResponseDTO = mapToResponse(fetchedBook);
 
         return bookResponseDTO;
     }
 
-    public List<BookResponseDTO> getAllBooks(){
+    public List<BookResponseDTO> getAllBooks() {
         List<BookResponseDTO> bookResponseDTOS = new ArrayList<>();
         List<Book> fetchedbooks = bookRepository.findAll();
-        for(Book book : fetchedbooks){
+        for (Book book : fetchedbooks) {
             BookResponseDTO bookResponseDTO = mapToResponse(book);
             bookResponseDTOS.add(bookResponseDTO);
         }
         return bookResponseDTOS;
     }
 
+    @Transactional
+    public BookResponseDTO updateBookDetails(Long bookId, BookRequestDTO bookRequestDTO) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new NotFoundException("Book not available with this given id"));
+
+        book.setTitle(bookRequestDTO.getTitle());
+        book.setAuthor(bookRequestDTO.getAuthor());
+        book.setIsbn(bookRequestDTO.getIsbn());
+        book.setCategory(bookRequestDTO.getCategory());
+        book.setEdition(bookRequestDTO.getEdition());
+        book.setPublicationYear(bookRequestDTO.getPublicationYear());
+        book.setLanguage(bookRequestDTO.getLanguage());
+        book.setDescription(bookRequestDTO.getDescription());
+        book.setPublisher(bookRequestDTO.getPublisher());
+
+        return mapToResponse(book);
+    }
+
+    public void deleteBookById(Long bookId){
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(()->new NotFoundException("Book not found with given id"));
+
+        bookRepository.delete(book);
+//        bookRepository.deleteById(bookId);
+    }
 }

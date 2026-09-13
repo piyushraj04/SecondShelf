@@ -59,4 +59,22 @@ public class BookController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
+    @PutMapping("/{bookId}")
+    public ResponseEntity<ResponseStructure<BookResponseDTO>> updateBookDetails(@PathVariable(name = "bookId",required = true) Long bookId,@Valid @RequestBody BookRequestDTO bookRequestDTO){
+        BookResponseDTO updatedBook = bookService.updateBookDetails(bookId,bookRequestDTO);
+        ResponseStructure<BookResponseDTO> response = new ResponseStructure<>();
+        response.setMessage("Book Details Updated Successfully");
+        response.setStatusCode(HttpStatus.OK.value());
+        response.setData(updatedBook);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{bookId}")
+    public ResponseEntity<Void> deleteBookById(@PathVariable Long bookId){
+        bookService.deleteBookById(bookId);
+
+        return  ResponseEntity.noContent().build();
+    }
+
+
 }
