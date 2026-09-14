@@ -327,4 +327,161 @@ public class BookListingService {
 
         return responseDTOs;
     }
+
+    public BookListingResponseDTO getBookListingByid(Long bookListingId){
+
+        BookListing bookListing = bookListingRepository.findById(bookListingId)
+                .orElseThrow(()-> new NotFoundException("no book listing available with this id"));
+        BookListingResponseDTO responseDTO = mapBookListingEntityToBookListingResponseDTO(bookListing);
+        return responseDTO;
+    }
+
+    public List<BookListingResponseDTO> getSellerListings(Long sellerId){
+        User seller = getVerifiedSeller(sellerId);
+        List<BookListingResponseDTO> listingDTOS = new ArrayList<>();
+        List<BookListing> listings = bookListingRepository.findBySellerId(sellerId)
+                .orElseThrow(()-> new NotFoundException("No listing associated or currently available with respect to this seller"));
+
+        for(BookListing listing : listings){
+            BookListingResponseDTO responseDTO = mapBookListingEntityToBookListingResponseDTO(listing);
+            listingDTOS.add(responseDTO);
+        }
+        return listingDTOS;
+    }
+
+    /*
+     * ============================================================
+     * UPDATE BOOK LISTING
+     * ============================================================
+     *
+     * Updates the editable details of an existing BookListing.
+     *
+     * sellerId and listingId come from the URL.
+     * The remaining listing details come from the request body.
+     *
+     * Before updating, we verify:
+     *
+     * 1. Seller exists, is ACTIVE and has SELLER role.
+     * 2. Listing exists and belongs to this seller.
+     * 3. New quantity is not less than current available quantity.
+     * 4. Book associated with the listing cannot be changed.
+     * 5. Listing type cannot be changed.
+     *
+     * Only these fields are actually updated:
+     * - price
+     * - condition
+     * - quantity
+     * - description
+     */
+    public BookListingResponseDTO updateListing(
+            Long listingId,
+            Long sellerId,
+            BookListingRequestDTO requestDTO) {
+
+        /*
+         * Step 1:
+         * Verify that the seller exists, is ACTIVE,
+         * and has the SELLER role.
+         */
+        getVerifiedSeller(sellerId);
+
+        /*
+         * Step 2:
+         * Find the listing using BOTH listingId and sellerId.
+         *
+         * This ensures that the listing belongs to the seller
+         * who is trying to update it.
+         */
+        BookListing bookListing =
+                bookListingRepository.findByIdAndSellerId(listingId, sellerId)
+                        .orElseThrow(() ->
+                                new ForbiddenOperationException(
+                                        "You are not allowed to update this listing"
+                                ));
+
+        /*
+         * Step 3:
+         * Make sure the new quantity is not less than the
+         * currently available quantity.
+         *
+         * Example:
+         *
+         * availableQuantity = 15
+         *
+         * new quantity = 15  -> allowed
+         * new quantity = 20  -> allowed
+         * new quantity = 10  -> not allowed
+         *
+         * More advanced inventory validation will be implemented
+         * later when Order/Rental functionality is introduced.
+         */
+        if (bookListing.getAvailableQuantity() < requestDTO.getQuantity()) {
+            throw new ForbiddenOperationException(
+                    "Quantity must be greater than or equal to the available quantity"
+            );
+        }
+
+        /*
+         * Step 4:
+         * The book associated with an existing listing cannot
+         * be changed.
+         *
+         * If the seller wants to list another book,
+         * a new listing should be created.
+         */
+        if (!bookListing.getBook().getId().equals(requestDTO.getBookId())) {
+            throw new ForbiddenOperationException(
+                    "Can't change the book of an existing listing. " +
+                            "Kindly create a new listing for that book"
+            );
+        }
+
+        /*
+         * Step 5:
+         * The listing type cannot be changed.
+         *
+         * SELL remains SELL.
+         * RENT remains RENT.
+         *
+         * If the seller wants the other listing type,
+         * a separate listing should be created.
+         */
+        if (!bookListing.getListingType().equals(requestDTO.getListingType())) {
+            throw new ForbiddenOperationException(
+                    "Listing type cannot be changed while updating the listing"
+            );
+        }
+
+        /*
+         * Step 6:
+         * Update only the fields that are allowed to change.
+         *
+         * Seller, Book and ListingType remain unchanged.
+         * availableQuantity and status are also not modified here.
+         */
+        bookListing.setPrice(requestDTO.getPrice());
+        bookListing.setCondition(requestDTO.getCondition());
+        bookListing.setQuantity(requestDTO.getQuantity());
+        bookListing.setDescription(requestDTO.getDescription());
+
+        /*
+         * Step 7:
+         * Save the existing BookListing entity.
+         *
+         * We are modifying the entity that was fetched from the
+         * database rather than creating a new BookListing.
+         *
+         * Therefore, JPA treats this as an update to the
+         * existing listing.
+         */
+        BookListing updatedListing =
+                bookListingRepository.save(bookListing);
+
+        /*
+         * Step 8:
+         * Convert the updated entity into the response DTO
+         * before returning it to the controller.
+         */
+        return mapBookListingEntityToBookListingResponseDTO(updatedListing);
+    }
 }
