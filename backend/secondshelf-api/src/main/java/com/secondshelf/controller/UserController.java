@@ -15,17 +15,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
+@RequestMapping("/api/")
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/register")
+    @PostMapping("users/register")
     public ResponseEntity<ResponseStructure<UserResponseDTO>> registerUser(@Valid @RequestBody UserRequestDTO userRequestDTO){
         ResponseStructure<UserResponseDTO> response = new ResponseStructure<>();
         response.setStatusCode(HttpStatus.CREATED.value());
         response.setMessage("User Registered Successfully");
         UserResponseDTO savedUser = userService.registerUser(userRequestDTO);
         response.setData(savedUser);
+        return new ResponseEntity<ResponseStructure<UserResponseDTO>>(response,HttpStatus.CREATED);
+    }
+
+    @PostMapping("sellers/register")
+    public ResponseEntity<ResponseStructure<UserResponseDTO>> registerSeller(@Valid @RequestBody UserRequestDTO userRequestDTO){
+        ResponseStructure<UserResponseDTO> response = new ResponseStructure<>();
+        response.setStatusCode(HttpStatus.CREATED.value());
+        response.setMessage("Seller Registered Successfully");
+        UserResponseDTO savedSeller = userService.registerSeller(userRequestDTO);
+        response.setData(savedSeller);
         return new ResponseEntity<ResponseStructure<UserResponseDTO>>(response,HttpStatus.CREATED);
     }
 

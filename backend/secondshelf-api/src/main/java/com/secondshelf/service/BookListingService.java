@@ -6,6 +6,10 @@ import com.secondshelf.dto.SellerResponseDTO;
 import com.secondshelf.entity.Book;
 import com.secondshelf.entity.BookListing;
 import com.secondshelf.entity.User;
+import com.secondshelf.enums.Role;
+import com.secondshelf.enums.UserStatus;
+import com.secondshelf.exception.ForbiddenOperationException;
+import com.secondshelf.exception.InactiveUserException;
 import com.secondshelf.exception.NotFoundException;
 import com.secondshelf.repository.BookListingRepository;
 import com.secondshelf.repository.BookRepository;
@@ -25,6 +29,13 @@ public class BookListingService {
 
         User seller = userRepository.findById(sellerId)
                 .orElseThrow(() -> new NotFoundException("No seller found with this id"));
+
+        if (seller.getUserStatus() != (UserStatus.ACTIVE)) {
+            throw new InactiveUserException("User account is inactive");
+        }
+        if (seller.getRole() != (Role.SELLER)) {
+            throw new ForbiddenOperationException("You are not allowed to perform this operation");
+        }
 
         Book book = bookRepository.findById(requestDTO.getBookId())
                 .orElseThrow(() -> new NotFoundException("No book found with this id"));
@@ -72,6 +83,7 @@ public class BookListingService {
         // Build SellerResponseDTO
         // =========================
         SellerResponseDTO sellerResponseDTO = new SellerResponseDTO();
+
         sellerResponseDTO.setId(seller.getId());
         sellerResponseDTO.setName(seller.getFullName());
         sellerResponseDTO.setProfileImageUrl(seller.getProfileImageUrl());

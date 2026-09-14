@@ -3,7 +3,6 @@ package com.secondshelf.exception;
 import com.secondshelf.dto.ResponseStructure;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -28,5 +27,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         response.setMessage(exp.getMessage());
         response.setData("Failed");
         return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ForbiddenOperationException.class)
+    public ResponseEntity<ResponseStructure<String>> forbiddenOperationException(ForbiddenOperationException exp){
+        ResponseStructure<String> response = new ResponseStructure<>();
+        response.setStatusCode(HttpStatus.FORBIDDEN.value());
+        response.setMessage(exp.getMessage());
+        response.setData("Forbidden Operation Performed");
+        return new ResponseEntity<>(response,HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(InactiveUserException.class)
+    public ResponseEntity<ResponseStructure<String>> inactiveUserException(InactiveUserException exp){
+        ResponseStructure<String> response = new ResponseStructure<>();
+        response.setStatusCode(HttpStatus.FORBIDDEN.value());
+        response.setMessage(exp.getMessage());
+        response.setData("Kindly active your account");
+        return new ResponseEntity<>(response,HttpStatus.FORBIDDEN);
     }
 }

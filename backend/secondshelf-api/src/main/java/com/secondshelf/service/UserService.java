@@ -3,6 +3,7 @@ package com.secondshelf.service;
 import com.secondshelf.dto.UserRequestDTO;
 import com.secondshelf.dto.UserResponseDTO;
 import com.secondshelf.entity.User;
+import com.secondshelf.enums.Role;
 import com.secondshelf.exception.ResourceAlreadyExistsException;
 import com.secondshelf.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,34 @@ public class UserService {
         userResponseDTO.setRole(savedUser.getRole());
         userResponseDTO.setUserStatus(savedUser.getUserStatus());
         userResponseDTO.setProfileImageUrl(savedUser.getProfileImageUrl());
+
+        return userResponseDTO;
+    }
+
+    public UserResponseDTO registerSeller(UserRequestDTO userRequestDTO){
+        if (userRepository.existsByEmail(userRequestDTO.getEmail())) {
+            throw new ResourceAlreadyExistsException("Email already registered");
+        }
+        if(userRepository.existsByContactNo(userRequestDTO.getContactNo())){
+            throw new ResourceAlreadyExistsException("Contact Number already registered");
+        }
+        User seller = new User();
+        seller.setFullName(userRequestDTO.getFullName());
+        seller.setContactNo(userRequestDTO.getContactNo());
+        seller.setEmail(userRequestDTO.getEmail());
+        seller.setPassword(userRequestDTO.getPassword());
+        seller.setRole(Role.SELLER);
+
+        User savedSeller = userRepository.save(seller);
+
+        UserResponseDTO userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setId(savedSeller.getId());
+        userResponseDTO.setFullName(savedSeller.getFullName());
+        userResponseDTO.setContactNo(savedSeller.getContactNo());
+        userResponseDTO.setEmail(savedSeller.getEmail());
+        userResponseDTO.setRole(savedSeller.getRole());
+        userResponseDTO.setUserStatus(savedSeller.getUserStatus());
+        userResponseDTO.setProfileImageUrl(savedSeller.getProfileImageUrl());
 
         return userResponseDTO;
     }
