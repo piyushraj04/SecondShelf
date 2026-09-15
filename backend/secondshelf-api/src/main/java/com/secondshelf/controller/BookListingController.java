@@ -115,6 +115,12 @@ public class BookListingController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
+    @DeleteMapping("/{sellerId}/{listingId}")
+    public ResponseEntity deleteListingById(@PathVariable Long sellerId,@PathVariable Long listingId){
+        bookListingService.deleteListingById(sellerId,listingId);
+        return ResponseEntity.noContent().build();
+    }
+
 
 
 }

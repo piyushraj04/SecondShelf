@@ -484,4 +484,10 @@ public class BookListingService {
          */
         return mapBookListingEntityToBookListingResponseDTO(updatedListing);
     }
+
+    public void deleteListingById(Long sellerId,Long listingId){
+        BookListing listing = bookListingRepository.findByIdAndSellerId(listingId,sellerId)
+                .orElseThrow(()-> new NotFoundException("Not allowed to delete a listing"));
+        bookListingRepository.delete(listing);
+    }
 }
