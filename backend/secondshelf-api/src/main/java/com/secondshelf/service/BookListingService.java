@@ -3,6 +3,7 @@ package com.secondshelf.service;
 import com.secondshelf.dto.BookListingRequestDTO;
 import com.secondshelf.dto.BookListingResponseDTO;
 import com.secondshelf.dto.SellerResponseDTO;
+import com.secondshelf.dto.SellerSummaryDTO;
 import com.secondshelf.entity.Book;
 import com.secondshelf.entity.BookListing;
 import com.secondshelf.entity.User;
@@ -206,12 +207,12 @@ public class BookListingService {
         // in the API response.
         // --------------------------------------------------------
 
-        SellerResponseDTO sellerResponseDTO = new SellerResponseDTO();
+        SellerSummaryDTO sellerSummaryDTO = new SellerSummaryDTO();
 
-        sellerResponseDTO.setId(seller.getId());
-        sellerResponseDTO.setName(seller.getFullName());
-        sellerResponseDTO.setProfileImageUrl(seller.getProfileImageUrl());
-        sellerResponseDTO.setUserStatus(seller.getUserStatus());
+        sellerSummaryDTO.setId(seller.getId());
+        sellerSummaryDTO.setName(seller.getFullName());
+        sellerSummaryDTO.setProfileImageUrl(seller.getProfileImageUrl());
+        sellerSummaryDTO.setUserStatus(seller.getUserStatus());
 
         /*
          * Seller rating functionality will be implemented later.
@@ -220,10 +221,10 @@ public class BookListingService {
          * - averageRating = null
          * - reviewCount = 0
          */
-        sellerResponseDTO.setAverageRating(null);
-        sellerResponseDTO.setReviewCount(0);
+        sellerSummaryDTO.setAverageRating(null);
+        sellerSummaryDTO.setReviewCount(0);
 
-        responseDTO.setSeller(sellerResponseDTO);
+        responseDTO.setSeller(sellerSummaryDTO);
 
         return responseDTO;
     }
@@ -339,8 +340,7 @@ public class BookListingService {
     public List<BookListingResponseDTO> getSellerListings(Long sellerId){
         User seller = getVerifiedSeller(sellerId);
         List<BookListingResponseDTO> listingDTOS = new ArrayList<>();
-        List<BookListing> listings = bookListingRepository.findBySellerId(sellerId)
-                .orElseThrow(()-> new NotFoundException("No listing associated or currently available with respect to this seller"));
+        List<BookListing> listings = bookListingRepository.findBySellerId(sellerId);
 
         for(BookListing listing : listings){
             BookListingResponseDTO responseDTO = mapBookListingEntityToBookListingResponseDTO(listing);

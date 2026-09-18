@@ -12,7 +12,9 @@ import java.util.Optional;
 @Repository
 public interface BookListingRepository extends JpaRepository<BookListing,Long> {
 
-    Optional<List<BookListing>> findBySellerId(Long sellerid);
+    List<BookListing> findBySellerId(Long sellerid);
+
+
     @Query("""
        SELECT b
        FROM BookListing b

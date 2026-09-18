@@ -1,20 +1,19 @@
 package com.secondshelf.dto;
+
 import com.secondshelf.enums.UserStatus;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Getter
 @Setter
-public class SellerResponseDTO {
+public class SellerSummaryDTO {
+
     private Long id;
     private String name;
     private String profileImageUrl;
     private UserStatus userStatus;
     private BigDecimal averageRating;
     private Integer reviewCount;
-    private List<BookListingSummaryDTO> listings;
-
 }

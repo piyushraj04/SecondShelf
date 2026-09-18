@@ -85,7 +85,7 @@ public class BookListingController {
      * ============================================================
      */
 
-    @GetMapping("/{bookListingId}")
+    @GetMapping("/listings/{bookListingId}")
     public ResponseEntity<ResponseStructure<BookListingResponseDTO>> getBookListingByid(@PathVariable(name = "bookListingId") Long bookListingId){
         BookListingResponseDTO responseDTO = bookListingService.getBookListingByid(bookListingId);
         ResponseStructure<BookListingResponseDTO> response = new ResponseStructure<>();

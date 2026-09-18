@@ -1,6 +1,6 @@
 package com.secondshelf.dto;
 
-import com.secondshelf.entity.User;
+import com.secondshelf.entity.Book;
 import com.secondshelf.enums.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,9 +9,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class BookListingResponseDTO {
-
-    private Long listingId;
+public class BookListingSummaryDTO {
 
     //Book Details
     private Long bookId;
@@ -26,19 +24,13 @@ public class BookListingResponseDTO {
     private Category category;
     private String coverImageUrl;
 
-    //for nested seller object  because we may need more info about seller like email or address or from when he was here
-    private SellerSummaryDTO seller;
-
-    //Listing details
+    //listing info
+    private Long listingId;
     private BigDecimal price;
-    private BookCondition condition;
+    private BookCondition condition = BookCondition.ACCEPTABLE;
     private Integer quantity;
-    private String listingDescription;
-    private ListingStatus status;
-    private ListingType listingType;
+    private String description;
+    private ListingStatus status = ListingStatus.AVAILABLE;
+    private ListingType listingType = ListingType.SELL;
     private Integer availableQuantity;
-
-
-
-
 }
