@@ -4,6 +4,8 @@
 
 SecondShelf is a full-stack marketplace for **buying, selling, and renting second-hand books**. It is being developed with a **Java 21 + Spring Boot backend** and a **React frontend**, with emphasis on clean architecture, validation, secure APIs, database design, and real-world marketplace business rules.
 
+> **Development status:** Active development. The backend is currently the primary focus; marketplace workflows and the React frontend are being built incrementally.
+
 ## Architecture
 
 ```text
@@ -56,7 +58,7 @@ DTOs • Validation • Exception Handling • Security • JPA Auditing
 - JUnit / Spring Boot testing foundation
 - Git and GitHub
 
-## Backend Modules
+## Implemented Backend Modules
 
 ### User Management
 - User registration
@@ -65,6 +67,9 @@ DTOs • Validation • Exception Handling • Security • JPA Auditing
 - User status validation
 - Duplicate email/contact checks
 - DTO-based responses
+- Database-backed authentication
+- BCrypt password encoding
+- Role-based authorization
 
 ### Address Management
 - Add address
@@ -123,21 +128,29 @@ Current security implementation includes:
 
 JWT authentication is **not yet claimed here**; it will be added only after implementation and verification.
 
-## Implemented Engineering Features
+## Development Status
 
-- Request validation
-- DTO mapping
-- Global exception handling
-- Custom business exceptions
-- JPA auditing
-- PostgreSQL configuration
-- H2 test profile
-- Spring Security authentication and authorization
-- BCrypt password hashing
-- AOP performance logging
-- Seller/user status checks
-- Ownership checks
-- Layered service architecture
+| Area | Status |
+|---|---|
+| Project structure | Complete |
+| User registration | Complete |
+| Address module | Complete |
+| Book module | Complete |
+| Validation | Complete |
+| DTO mapping | Complete |
+| Exception handling | Complete |
+| JPA auditing | Complete |
+| PostgreSQL configuration | Complete |
+| H2 test profile | Complete |
+| AOP performance logging | Complete |
+| Spring Security authentication & RBAC | Complete |
+| Book listing | In progress |
+| Cart / Wishlist workflow | Planned |
+| Order / Payment workflow | Planned |
+| React frontend | In progress |
+| API documentation | Planned |
+| Automated test coverage | In progress |
+| Deployment | Planned |
 
 ## Project Structure
 
@@ -160,45 +173,30 @@ SecondShelf/
 │
 ├── frontend/
 │   └── secondshelf-web/
-│
 ├── docs/
 ├── diagrams/
 ├── assets/
 └── README.md
 ```
 
-## Development Status
+## Roadmap
 
-| Area | Status |
-|---|---|
-| Project structure | ✅ |
-| User registration | ✅ |
-| Address module | ✅ |
-| Book module | ✅ |
-| Validation | ✅ |
-| DTO mapping | ✅ |
-| Exception handling | ✅ |
-| JPA auditing | ✅ |
-| PostgreSQL configuration | ✅ |
-| H2 test profile | ✅ |
-| AOP performance logging | ✅ |
-| Spring Security authentication & RBAC | ✅ |
-| Book listing | 🔄 |
-| Cart / Wishlist workflow | 🔄 |
-| Order / Payment workflow | 🔄 |
-| React frontend | 🔄 |
-| API documentation | 🔄 |
-| Deployment | ⏳ |
-
-## Project Goal
-
-The goal is to evolve SecondShelf into a complete, demonstrable marketplace application with secure authentication and authorization, buying and renting workflows, inventory and listing management, cart and wishlist workflows, orders and payments, reviews and ratings, a React-based user interface, automated tests, Dockerized deployment, and production-oriented documentation.
+1. Complete Book Listing workflow
+2. Harden and refine Spring Security
+3. Implement Cart and Wishlist workflows
+4. Implement Order, Payment and Review workflows
+5. Build the React frontend
+6. Add API documentation
+7. Expand automated tests
+8. Dockerize and deploy the application
+9. Add practical GenAI features where they provide real product value
 
 ## Developer
 
 **Piyush Raj**
 
-Java Backend Developer · Java Full Stack Developer  
-Java • Spring Boot • Spring Data JPA • Hibernate • PostgreSQL • React
+Java Backend Developer · Java Full Stack Developer
+
+Java • Spring Boot • Spring Data JPA • Hibernate • Spring Security • PostgreSQL • React
 
 GitHub: https://github.com/piyushraj04
