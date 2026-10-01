@@ -113,7 +113,14 @@ public class BookListingService {
         // Copy listing-specific information from the request DTO.
         bookListing.setPrice(requestDTO.getPrice());
         bookListing.setCondition(requestDTO.getCondition());
-        bookListing.setQuantity(requestDTO.getQuantity());
+        int oldQuantity = bookListing.getQuantity();
+        int newQuantity = requestDTO.getQuantity();
+        int quantityDifference = newQuantity - oldQuantity;
+
+        bookListing.setQuantity(newQuantity);
+        bookListing.setAvailableQuantity(
+                bookListing.getAvailableQuantity() + quantityDifference
+        );
         bookListing.setDescription(requestDTO.getDescription());
         bookListing.setListingType(requestDTO.getListingType());
 
@@ -415,9 +422,9 @@ public class BookListingService {
          * More advanced inventory validation will be implemented
          * later when Order/Rental functionality is introduced.
          */
-        if (bookListing.getAvailableQuantity() < requestDTO.getQuantity()) {
+        if (requestDTO.getQuantity() < bookListing.getAvailableQuantity()) {
             throw new ForbiddenOperationException(
-                    "Quantity must be greater than or equal to the available quantity"
+                    "Quantity cannot be less than the currently available quantity"
             );
         }
 
@@ -457,7 +464,9 @@ public class BookListingService {
          * Update only the fields that are allowed to change.
          *
          * Seller, Book and ListingType remain unchanged.
-         * availableQuantity and status are also not modified here.
+         * availableQuantity is adjusted with the quantity change so
+         * the already-sold/reserved count remains consistent.
+         * Status is not modified here.
          */
         bookListing.setPrice(requestDTO.getPrice());
         bookListing.setCondition(requestDTO.getCondition());
